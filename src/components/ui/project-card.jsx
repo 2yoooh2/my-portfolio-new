@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -55,10 +55,11 @@ function ProjectCard({
           href={detailUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute right-3 top-3 rounded-full bg-background/80 p-2 opacity-0 backdrop-blur-sm transition-opacity duration-300 hover:bg-background group-hover:opacity-100"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           aria-label={`${title} 사이트 열기`}
         >
-          <ExternalLink className="h-4 w-4" />
+          <ArrowUpRight className="h-8 w-8 text-white" />
+          <span className="text-sm font-medium text-white">바로가기</span>
         </a>
       </div>
       <CardContent className="p-4">
