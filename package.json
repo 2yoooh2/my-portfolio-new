@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://2yoooh2.github.io/my-portfolio",
+  "homepage": "https://2yoooh2.github.io/my-portfolio-new",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
