@@ -16,7 +16,7 @@ import Projects from '@/pages/projects';
  */
 function App() {
   return (
-    <BrowserRouter basename="/my-portfolio-new">
+    <BrowserRouter basename="/">
       <div className="min-h-screen flex flex-col">
         <Navigation />
         <main className="flex-1">
