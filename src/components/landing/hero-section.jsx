@@ -152,6 +152,7 @@ function NutrientTag({ name, color, glowColor, delay }) {
 function HeroSection() {
   const [visibleLines, setVisibleLines] = useState([]);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [mousePos, setMousePos] = useState({ px: 0, py: 0 });
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -170,6 +171,10 @@ function HeroSection() {
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
     setMouse({ x, y });
+    setMousePos({
+      px: e.clientX - rect.left,
+      py: e.clientY - rect.top,
+    });
   }, []);
 
   const handleScrollDown = () => {
@@ -181,43 +186,53 @@ function HeroSection() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-between overflow-hidden"
+      style={{
+        background: 'linear-gradient(180deg, #1B2A4A 0%, #243B6A 30%, #2D5A88 60%, #4A8DB7 85%, #7EC8E3 100%)',
+      }}
     >
-      {/* 파스텔 배경 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-50/60 via-blue-50/20 to-transparent -z-10" />
+      {/* 마우스 스포트라이트 */}
+      <div
+        className="absolute pointer-events-none -z-0"
+        style={{
+          left: mousePos.px,
+          top: mousePos.py,
+          width: 400,
+          height: 400,
+          transform: 'translate(-50%, -50%)',
+          background: 'radial-gradient(circle, rgba(255,255,200,0.25) 0%, rgba(255,255,180,0.1) 30%, transparent 70%)',
+          transition: 'left 0.15s ease-out, top 0.15s ease-out',
+        }}
+      />
 
       {/* 마우스 따라다니는 배경 장식 */}
       <div
-        className="absolute top-[8%] left-[6%] w-28 h-28 rounded-full bg-emerald-200/30 blur-3xl pointer-events-none"
+        className="absolute top-[8%] left-[6%] w-32 h-32 rounded-full pointer-events-none"
         style={{
+          background: 'radial-gradient(circle, rgba(134,239,172,0.2), transparent)',
           transform: `translate(${mouse.x * 30}px, ${mouse.y * 20}px)`,
           transition: 'transform 0.3s ease-out',
         }}
       />
       <div
-        className="absolute top-[15%] right-[10%] w-24 h-24 rounded-full bg-violet-200/30 blur-3xl pointer-events-none"
+        className="absolute top-[15%] right-[10%] w-28 h-28 rounded-full pointer-events-none"
         style={{
+          background: 'radial-gradient(circle, rgba(167,139,250,0.15), transparent)',
           transform: `translate(${mouse.x * -25}px, ${mouse.y * 15}px)`,
           transition: 'transform 0.3s ease-out',
         }}
       />
       <div
-        className="absolute bottom-[30%] left-[12%] w-20 h-20 rounded-full bg-amber-200/25 blur-3xl pointer-events-none"
+        className="absolute bottom-[30%] left-[12%] w-24 h-24 rounded-full pointer-events-none"
         style={{
+          background: 'radial-gradient(circle, rgba(253,230,138,0.15), transparent)',
           transform: `translate(${mouse.x * 20}px, ${mouse.y * -18}px)`,
           transition: 'transform 0.3s ease-out',
         }}
       />
-      <div
-        className="absolute top-[40%] right-[8%] w-16 h-16 rounded-full bg-rose-200/20 blur-3xl pointer-events-none"
-        style={{
-          transform: `translate(${mouse.x * -15}px, ${mouse.y * 12}px)`,
-          transition: 'transform 0.3s ease-out',
-        }}
-      />
 
-      {/* 스토리텔링 헤드라인 - 마우스에 살짝 반응 */}
+      {/* 스토리텔링 헤드라인 */}
       <div
-        className="text-center flex flex-col gap-2 md:gap-3 pt-8 md:pt-12 px-4"
+        className="text-center flex flex-col gap-2 md:gap-3 pt-8 md:pt-12 px-4 z-10"
         style={{
           transform: `translate(${mouse.x * -4}px, ${mouse.y * -3}px)`,
           transition: 'transform 0.4s ease-out',
@@ -226,7 +241,7 @@ function HeroSection() {
         {storyLines.map((line, index) => (
           <h1
             key={index}
-            className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800"
+            className="text-2xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg"
             style={{
               opacity: visibleLines.includes(index) ? 1 : 0,
               transform: visibleLines.includes(index) ? 'translateY(0)' : 'translateY(24px)',
@@ -238,9 +253,9 @@ function HeroSection() {
         ))}
       </div>
 
-      {/* 나무 - 살짝 축소 + 마우스 패럴랙스 */}
+      {/* 나무 */}
       <div
-        className="relative w-full max-w-sm md:max-w-md flex-1 flex flex-col items-center justify-end px-4"
+        className="relative w-full max-w-sm md:max-w-md flex-1 flex flex-col items-center justify-end px-4 z-10"
         style={{
           transform: `translate(${mouse.x * 6}px, ${mouse.y * 4}px)`,
           transition: 'transform 0.5s ease-out',
@@ -252,7 +267,7 @@ function HeroSection() {
       </div>
 
       {/* 양분 태그들 */}
-      <div className="w-full max-w-sm md:max-w-md px-4 -mt-4 md:-mt-6 mb-2">
+      <div className="w-full max-w-sm md:max-w-md px-4 -mt-4 md:-mt-6 mb-2 z-10">
         <div className="flex items-end justify-between px-1 md:px-3">
           {skillNutrients.map((nutrient, index) => (
             <NutrientTag
@@ -267,8 +282,8 @@ function HeroSection() {
       </div>
 
       {/* 직무 */}
-      <div className="text-center pb-16 md:pb-20" style={{ animation: 'fadeSlideUp 0.8s ease-out 3.2s both' }}>
-        <p className="text-base md:text-lg text-muted-foreground">
+      <div className="text-center pb-16 md:pb-20 z-10" style={{ animation: 'fadeSlideUp 0.8s ease-out 3.2s both' }}>
+        <p className="text-base md:text-lg text-blue-100/80">
           기초를 탄탄히, 가지를 넓게 뻗어나가겠습니다
         </p>
       </div>
@@ -276,7 +291,7 @@ function HeroSection() {
       {/* 스크롤 다운 */}
       <button
         onClick={handleScrollDown}
-        className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
+        className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-blue-200/50 hover:text-blue-100 transition-colors cursor-pointer z-10"
         style={{ animation: 'fadeSlideUp 0.6s ease-out 3.6s both' }}
         aria-label="아래로 스크롤"
       >
