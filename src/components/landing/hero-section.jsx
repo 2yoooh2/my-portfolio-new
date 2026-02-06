@@ -232,7 +232,7 @@ function HeroSection() {
 
       {/* 스토리텔링 헤드라인 */}
       <div
-        className="text-center flex flex-col gap-2 md:gap-3 pt-8 md:pt-12 px-4 z-10"
+        className="text-center flex flex-col gap-2 md:gap-3 pt-6 md:pt-8 px-4 z-10"
         style={{
           transform: `translate(${mouse.x * -4}px, ${mouse.y * -3}px)`,
           transition: 'transform 0.4s ease-out',
@@ -255,7 +255,7 @@ function HeroSection() {
 
       {/* 나무 */}
       <div
-        className="relative w-full max-w-sm md:max-w-md flex-1 flex flex-col items-center justify-end px-4 z-10"
+        className="relative w-full max-w-sm md:max-w-md flex-1 flex flex-col items-center justify-center px-4 z-10"
         style={{
           transform: `translate(${mouse.x * 6}px, ${mouse.y * 4}px)`,
           transition: 'transform 0.5s ease-out',
