@@ -53,10 +53,126 @@ const postItNotes = [
 ];
 
 /**
+ * CatAvatar 컴포넌트 - 귀여운 고양이 SVG 아바타
+ *
+ * Props:
+ * 없음
+ *
+ * Example usage:
+ * <CatAvatar />
+ */
+function CatAvatar() {
+  return (
+    <svg viewBox="0 0 200 200" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* 배경 원 */}
+      <circle cx="100" cy="100" r="96" fill="#E0F2FE" />
+      <circle cx="100" cy="100" r="96" fill="url(#avatarGrad)" />
+      <defs>
+        <radialGradient id="avatarGrad">
+          <stop offset="0%" stopColor="#BAE6FD" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#7DD3FC" stopOpacity="0.15" />
+        </radialGradient>
+      </defs>
+
+      {/* 몸통 */}
+      <ellipse cx="100" cy="158" rx="42" ry="30" fill="#FFD8A8" />
+
+      {/* 얼굴 */}
+      <ellipse cx="100" cy="108" rx="52" ry="46" fill="#FFE0B2" />
+
+      {/* 귀 왼쪽 */}
+      <path d="M58 72 L42 32 L78 58 Z" fill="#FFE0B2" />
+      <path d="M60 68 L48 38 L74 58 Z" fill="#FFCC80" />
+
+      {/* 귀 오른쪽 */}
+      <path d="M142 72 L158 32 L122 58 Z" fill="#FFE0B2" />
+      <path d="M140 68 L152 38 L126 58 Z" fill="#FFCC80" />
+
+      {/* 눈 왼쪽 */}
+      <ellipse cx="80" cy="102" rx="10" ry="11" fill="white" />
+      <ellipse cx="82" cy="103" rx="6" ry="7" fill="#4A3728" />
+      <circle cx="84" cy="100" r="2.5" fill="white" />
+
+      {/* 눈 오른쪽 */}
+      <ellipse cx="120" cy="102" rx="10" ry="11" fill="white" />
+      <ellipse cx="118" cy="103" rx="6" ry="7" fill="#4A3728" />
+      <circle cx="120" cy="100" r="2.5" fill="white" />
+
+      {/* 코 */}
+      <ellipse cx="100" cy="116" rx="4" ry="3" fill="#FF8A80" />
+
+      {/* 입 */}
+      <path d="M93 120 Q100 127 107 120" stroke="#C4956A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+
+      {/* 수염 왼쪽 */}
+      <line x1="50" y1="108" x2="75" y2="112" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="48" y1="116" x2="74" y2="116" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="50" y1="124" x2="75" y2="120" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* 수염 오른쪽 */}
+      <line x1="150" y1="108" x2="125" y2="112" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="152" y1="116" x2="126" y2="116" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="150" y1="124" x2="125" y2="120" stroke="#D4A574" strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* 볼터치 */}
+      <ellipse cx="68" cy="118" rx="10" ry="6" fill="#FFAB91" opacity="0.35" />
+      <ellipse cx="132" cy="118" rx="10" ry="6" fill="#FFAB91" opacity="0.35" />
+    </svg>
+  );
+}
+
+/**
+ * ProfileCard 컴포넌트 - 프로필 카드
+ *
+ * Props:
+ * @param {boolean} isVisible - 화면 노출 여부 [Required]
+ *
+ * Example usage:
+ * <ProfileCard isVisible={true} />
+ */
+function ProfileCard({ isVisible }) {
+  return (
+    <div
+      className="flex flex-col items-center gap-4 p-6 md:p-8 rounded-2xl bg-white/80 border border-gray-100 shadow-sm"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.6s ease-out 100ms, transform 0.6s ease-out 100ms',
+      }}
+    >
+      {/* 고양이 아바타 */}
+      <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-sky-100 shadow-md">
+        <CatAvatar />
+      </div>
+
+      {/* 이름 */}
+      <h3 className="text-xl md:text-2xl font-bold text-gray-800">유혜지</h3>
+
+      {/* 한 줄 소개 */}
+      <p className="text-sm md:text-base text-muted-foreground text-center leading-relaxed">
+        디자인과 코드 사이,<br />
+        다리를 놓는 퍼블리셔
+      </p>
+
+      {/* 키워드 태그 */}
+      <div className="flex flex-wrap justify-center gap-2 mt-1">
+        {['Web Publisher', 'UI Developer', 'Pixel Perfect'].map((tag) => (
+          <span
+            key={tag}
+            className="px-3 py-1 text-xs font-medium rounded-full bg-sky-50 text-sky-600 border border-sky-100"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
  * PostItNote 컴포넌트 - 드래그 가능한 포스트잇
  *
  * Props:
- * @param {string} id - 고유 ID [Required]
  * @param {string} title - 포스트잇 제목 [Required]
  * @param {string} content - 포스트잇 내용 [Required]
  * @param {string} color - 배경색 (hex) [Required]
@@ -69,7 +185,7 @@ const postItNotes = [
  * @param {boolean} isVisible - 화면 노출 여부 [Required]
  *
  * Example usage:
- * <PostItNote id="start" title="제목" content="내용" color="#FEF3C7" pinColor="#F59E0B" rotate={-3} position={{ x: 0, y: 0 }} onDragStart={() => {}} isDragging={false} delay={0} isVisible={true} />
+ * <PostItNote title="제목" content="내용" color="#FEF3C7" pinColor="#F59E0B" rotate={-3} position={{ x: 0, y: 0 }} onDragStart={() => {}} isDragging={false} delay={0} isVisible={true} />
  */
 function PostItNote({
   title,
@@ -126,7 +242,7 @@ function PostItNote({
 }
 
 /**
- * AboutSection 컴포넌트 - 포스트잇 드래그 보드
+ * AboutSection 컴포넌트 - 프로필 + 포스트잇 드래그 보드
  *
  * Props:
  * 없음
@@ -246,7 +362,7 @@ function AboutSection() {
     <section ref={ref} className="py-12 md:py-20">
       {/* 섹션 헤더 */}
       <div
-        className="text-center mb-6 md:mb-8"
+        className="text-center mb-8 md:mb-10"
         style={{
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -257,84 +373,93 @@ function AboutSection() {
         <p className="text-muted-foreground text-base md:text-lg">
           코드로 디자인에 생명을 불어넣는 퍼블리셔
         </p>
-        <p className="text-xs md:text-sm text-muted-foreground/60 mt-2">
-          포스트잇을 드래그해서 자유롭게 옮겨보세요!
-        </p>
       </div>
 
-      {/* 포스트잇 우드보드 */}
-      <div
-        ref={boardRef}
-        className="relative w-full min-h-[420px] md:min-h-[460px] rounded-2xl overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #D4A574 0%, #C4956A 25%, #B8865E 50%, #C4956A 75%, #D4A574 100%)',
-          boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
-          border: '3px solid #A0764E',
-        }}
-      >
-        {/* 나무결 텍스처 */}
-        <div
-          className="absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(
-              95deg,
-              transparent,
-              transparent 8px,
-              rgba(139,90,43,0.3) 8px,
-              rgba(139,90,43,0.3) 9px
-            ), repeating-linear-gradient(
-              87deg,
-              transparent,
-              transparent 15px,
-              rgba(160,118,78,0.2) 15px,
-              rgba(160,118,78,0.2) 16px
-            )`,
-          }}
-        />
-        {/* 나무 결 노드(매듭) 장식 */}
-        <div
-          className="absolute top-[15%] left-[8%] w-10 h-6 rounded-full opacity-[0.08]"
-          style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
-        />
-        <div
-          className="absolute bottom-[20%] right-[12%] w-8 h-5 rounded-full opacity-[0.06]"
-          style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
-        />
+      {/* 프로필 + 우드보드 양 옆 레이아웃 */}
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 md:gap-8">
+        {/* 왼쪽: 프로필 카드 */}
+        <div className="flex flex-col gap-4">
+          <ProfileCard isVisible={isVisible} />
 
-        {positions.length > 0 && postItNotes.map((note, index) => (
-          <PostItNote
-            key={note.id}
-            title={note.title}
-            content={note.content}
-            color={note.color}
-            pinColor={note.pinColor}
-            rotate={note.rotate}
-            position={positions[index]}
-            onDragStart={(e) => handleDragStart(index, e)}
-            isDragging={dragging === index}
-            delay={index * 200}
-            isVisible={isVisible}
-          />
-        ))}
-      </div>
+          {/* 더 알아보기 버튼 */}
+          <div
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
+              transition: 'opacity 0.6s ease-out 900ms, transform 0.6s ease-out 900ms',
+            }}
+          >
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full transition-transform hover:scale-105"
+              onClick={() => navigate('/about')}
+            >
+              더 알아보기
+            </Button>
+          </div>
+        </div>
 
-      {/* 더 알아보기 버튼 */}
-      <div
-        className="mt-8 md:mt-10 text-center"
-        style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
-          transition: 'opacity 0.6s ease-out 900ms, transform 0.6s ease-out 900ms',
-        }}
-      >
-        <Button
-          variant="outline"
-          size="lg"
-          className="transition-transform hover:scale-105"
-          onClick={() => navigate('/about')}
-        >
-          더 알아보기
-        </Button>
+        {/* 오른쪽: 포스트잇 우드보드 */}
+        <div className="flex flex-col gap-2">
+          <p className="text-xs md:text-sm text-muted-foreground/60 text-center lg:text-left">
+            포스트잇을 드래그해서 자유롭게 옮겨보세요!
+          </p>
+          <div
+            ref={boardRef}
+            className="relative w-full min-h-[420px] md:min-h-[440px] rounded-2xl overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #D4A574 0%, #C4956A 25%, #B8865E 50%, #C4956A 75%, #D4A574 100%)',
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
+              border: '3px solid #A0764E',
+            }}
+          >
+            {/* 나무결 텍스처 */}
+            <div
+              className="absolute inset-0 opacity-[0.12]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(
+                  95deg,
+                  transparent,
+                  transparent 8px,
+                  rgba(139,90,43,0.3) 8px,
+                  rgba(139,90,43,0.3) 9px
+                ), repeating-linear-gradient(
+                  87deg,
+                  transparent,
+                  transparent 15px,
+                  rgba(160,118,78,0.2) 15px,
+                  rgba(160,118,78,0.2) 16px
+                )`,
+              }}
+            />
+            {/* 나무 결 노드(매듭) 장식 */}
+            <div
+              className="absolute top-[15%] left-[8%] w-10 h-6 rounded-full opacity-[0.08]"
+              style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
+            />
+            <div
+              className="absolute bottom-[20%] right-[12%] w-8 h-5 rounded-full opacity-[0.06]"
+              style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
+            />
+
+            {positions.length > 0 && postItNotes.map((note, index) => (
+              <PostItNote
+                key={note.id}
+                title={note.title}
+                content={note.content}
+                color={note.color}
+                pinColor={note.pinColor}
+                rotate={note.rotate}
+                position={positions[index]}
+                onDragStart={(e) => handleDragStart(index, e)}
+                isDragging={dragging === index}
+                delay={index * 200}
+                isVisible={isVisible}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
