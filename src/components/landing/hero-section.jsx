@@ -185,7 +185,7 @@ function HeroSection() {
     <section
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-between overflow-hidden"
+      className="relative h-screen flex flex-col items-center justify-between overflow-hidden"
       style={{
         background: 'linear-gradient(180deg, #1B2A4A 0%, #243B6A 30%, #2D5A88 60%, #4A8DB7 85%, #7EC8E3 100%)',
       }}
