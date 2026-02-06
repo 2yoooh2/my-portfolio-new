@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 const skillNutrients = [
-  { name: 'HTML', color: '#FDBA74', delay: '1.8s' },
-  { name: 'CSS', color: '#93C5FD', delay: '2.1s' },
-  { name: 'JavaScript', color: '#FDE68A', delay: '2.4s' },
-  { name: 'Figma', color: '#C4B5FD', delay: '2.7s' },
-  { name: 'React', color: '#A5F3FC', delay: '3.0s' },
+  { name: 'HTML', color: '#FDBA74', glowColor: 'rgba(253,186,116,0.5)', x: '8%' },
+  { name: 'CSS', color: '#93C5FD', glowColor: 'rgba(147,197,253,0.5)', x: '26%' },
+  { name: 'React', color: '#A5F3FC', glowColor: 'rgba(165,243,252,0.5)', x: '44%' },
+  { name: 'JavaScript', color: '#FDE68A', glowColor: 'rgba(253,230,138,0.5)', x: '62%' },
+  { name: 'Figma', color: '#C4B5FD', glowColor: 'rgba(196,181,253,0.5)', x: '80%' },
 ];
 
 const storyLines = [
@@ -16,7 +16,7 @@ const storyLines = [
 ];
 
 /**
- * GrowingTree 컴포넌트
+ * GrowingTree 컴포넌트 - 큰 나무 SVG
  *
  * Props:
  * 없음
@@ -26,203 +26,151 @@ const storyLines = [
  */
 function GrowingTree() {
   return (
-    <div
-      className="relative w-[280px] h-[320px] md:w-[340px] md:h-[400px]"
-      style={{ animation: 'sway 6s ease-in-out infinite' }}
+    <svg
+      viewBox="0 0 500 600"
+      className="w-full h-full"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <svg
-        viewBox="0 0 340 400"
-        className="w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* 뿌리 */}
-        <g style={{ animation: 'growTrunk 0.8s ease-out 0.2s both', transformOrigin: '170px 380px' }}>
-          <path
-            d="M155 380 Q140 370 125 385"
-            stroke="#C4A882"
-            strokeWidth="4"
-            fill="none"
-            strokeLinecap="round"
-            opacity="0.6"
-          />
-          <path
-            d="M185 380 Q200 372 215 388"
-            stroke="#C4A882"
-            strokeWidth="4"
-            fill="none"
-            strokeLinecap="round"
-            opacity="0.6"
-          />
-          <path
-            d="M170 385 Q170 375 160 395"
-            stroke="#C4A882"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            opacity="0.5"
-          />
-        </g>
+      <defs>
+        <linearGradient id="trunkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#9B7B5B" />
+          <stop offset="100%" stopColor="#7A6248" />
+        </linearGradient>
+        <radialGradient id="canopy1">
+          <stop offset="0%" stopColor="#86EFAC" />
+          <stop offset="100%" stopColor="#4ADE80" />
+        </radialGradient>
+        <radialGradient id="canopy2">
+          <stop offset="0%" stopColor="#A7F3D0" />
+          <stop offset="100%" stopColor="#6EE7B7" />
+        </radialGradient>
+        <radialGradient id="canopy3">
+          <stop offset="0%" stopColor="#6EE7B7" />
+          <stop offset="100%" stopColor="#34D399" />
+        </radialGradient>
+        <linearGradient id="soilGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#D4A76A" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#C4956A" stopOpacity="0.15" />
+        </linearGradient>
+      </defs>
 
-        {/* 줄기 */}
-        <rect
-          x="158"
-          y="200"
-          width="24"
-          rx="12"
-          height="185"
-          fill="url(#trunkGradient)"
-          style={{ animation: 'growTrunk 1s ease-out 0.3s both', transformOrigin: '170px 385px' }}
-        />
+      {/* 땅 표면 */}
+      <ellipse cx="250" cy="520" rx="220" ry="18" fill="url(#soilGrad)" />
 
-        {/* 왼쪽 가지 */}
-        <path
-          d="M162 260 Q130 240 110 210"
-          stroke="#A78B6B"
-          strokeWidth="8"
-          fill="none"
-          strokeLinecap="round"
-          style={{ animation: 'growBranch 0.6s ease-out 1.0s both', transformOrigin: '162px 260px' }}
-        />
+      {/* 뿌리 - 크고 땅속으로 깊이 뻗음 */}
+      <g style={{ animation: 'growTrunk 0.8s ease-out 0.2s both', transformOrigin: '250px 510px' }}>
+        <path d="M235 510 Q200 530 150 550" stroke="#B8976B" strokeWidth="7" fill="none" strokeLinecap="round" opacity="0.7" />
+        <path d="M265 510 Q300 535 350 555" stroke="#B8976B" strokeWidth="7" fill="none" strokeLinecap="round" opacity="0.7" />
+        <path d="M245 515 Q220 545 180 570" stroke="#B8976B" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.55" />
+        <path d="M260 515 Q285 545 325 565" stroke="#B8976B" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.55" />
+        <path d="M250 518 Q250 548 240 580" stroke="#B8976B" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.4" />
+        {/* 잔뿌리들 */}
+        <path d="M175 540 Q160 548 140 545" stroke="#C4A882" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.4" />
+        <path d="M330 548 Q345 555 360 550" stroke="#C4A882" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.4" />
+      </g>
 
-        {/* 오른쪽 가지 */}
-        <path
-          d="M178 240 Q210 218 235 195"
-          stroke="#A78B6B"
-          strokeWidth="7"
-          fill="none"
-          strokeLinecap="round"
-          style={{ animation: 'growBranch 0.6s ease-out 1.2s both', transformOrigin: '178px 240px' }}
-        />
+      {/* 줄기 - 두껍고 높게 */}
+      <path
+        d="M240 510 Q238 400 242 300 Q244 280 250 270 Q256 280 258 300 Q262 400 260 510 Z"
+        fill="url(#trunkGrad)"
+        style={{ animation: 'growTrunk 1.2s ease-out 0.3s both', transformOrigin: '250px 510px' }}
+      />
 
-        {/* 윗 가지 */}
-        <path
-          d="M165 220 Q145 190 130 165"
-          stroke="#A78B6B"
-          strokeWidth="5"
-          fill="none"
-          strokeLinecap="round"
-          style={{ animation: 'growBranch 0.6s ease-out 1.3s both', transformOrigin: '165px 220px' }}
-        />
+      {/* 왼쪽 큰 가지 */}
+      <path
+        d="M245 370 Q190 340 130 280"
+        stroke="#9B7B5B" strokeWidth="12" fill="none" strokeLinecap="round"
+        style={{ animation: 'growBranch 0.7s ease-out 1.0s both', transformOrigin: '245px 370px' }}
+      />
+      {/* 왼쪽 작은 가지 */}
+      <path
+        d="M185 335 Q160 310 145 280"
+        stroke="#9B7B5B" strokeWidth="6" fill="none" strokeLinecap="round"
+        style={{ animation: 'growBranch 0.5s ease-out 1.3s both', transformOrigin: '185px 335px' }}
+      />
 
-        {/* 수관 (나뭇잎 덩어리들) */}
-        <ellipse
-          cx="170"
-          cy="155"
-          rx="75"
-          ry="65"
-          fill="url(#canopyGradient1)"
-          style={{ animation: 'bloomLeaf 0.8s ease-out 1.4s both', transformOrigin: '170px 155px' }}
-        />
-        <ellipse
-          cx="120"
-          cy="185"
-          rx="50"
-          ry="45"
-          fill="url(#canopyGradient2)"
-          style={{ animation: 'bloomLeaf 0.8s ease-out 1.6s both', transformOrigin: '120px 185px' }}
-        />
-        <ellipse
-          cx="225"
-          cy="175"
-          rx="48"
-          ry="42"
-          fill="url(#canopyGradient3)"
-          style={{ animation: 'bloomLeaf 0.8s ease-out 1.7s both', transformOrigin: '225px 175px' }}
-        />
-        <ellipse
-          cx="155"
-          cy="115"
-          rx="42"
-          ry="38"
-          fill="url(#canopyGradient2)"
-          style={{ animation: 'bloomLeaf 0.8s ease-out 1.8s both', transformOrigin: '155px 115px' }}
-        />
-        <ellipse
-          cx="200"
-          cy="125"
-          rx="40"
-          ry="36"
-          fill="url(#canopyGradient1)"
-          style={{ animation: 'bloomLeaf 0.8s ease-out 1.9s both', transformOrigin: '200px 125px' }}
-        />
+      {/* 오른쪽 큰 가지 */}
+      <path
+        d="M255 350 Q310 310 370 265"
+        stroke="#9B7B5B" strokeWidth="11" fill="none" strokeLinecap="round"
+        style={{ animation: 'growBranch 0.7s ease-out 1.1s both', transformOrigin: '255px 350px' }}
+      />
+      {/* 오른쪽 작은 가지 */}
+      <path
+        d="M315 305 Q340 285 360 250"
+        stroke="#9B7B5B" strokeWidth="5" fill="none" strokeLinecap="round"
+        style={{ animation: 'growBranch 0.5s ease-out 1.4s both', transformOrigin: '315px 305px' }}
+      />
 
-        {/* 그라디언트 정의 */}
-        <defs>
-          <linearGradient id="trunkGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#A78B6B" />
-            <stop offset="100%" stopColor="#8B7355" />
-          </linearGradient>
-          <radialGradient id="canopyGradient1">
-            <stop offset="0%" stopColor="#86EFAC" />
-            <stop offset="100%" stopColor="#6EE7B7" />
-          </radialGradient>
-          <radialGradient id="canopyGradient2">
-            <stop offset="0%" stopColor="#A7F3D0" />
-            <stop offset="100%" stopColor="#86EFAC" />
-          </radialGradient>
-          <radialGradient id="canopyGradient3">
-            <stop offset="0%" stopColor="#6EE7B7" />
-            <stop offset="100%" stopColor="#5BD8A8" />
-          </radialGradient>
-        </defs>
-      </svg>
+      {/* 위쪽 가지 */}
+      <path
+        d="M248 310 Q235 260 220 210"
+        stroke="#9B7B5B" strokeWidth="8" fill="none" strokeLinecap="round"
+        style={{ animation: 'growBranch 0.6s ease-out 1.2s both', transformOrigin: '248px 310px' }}
+      />
 
-      {/* 기술 양분 태그들 */}
-      <div
-        className="absolute top-[12%] left-[4%]"
-        style={{ animation: `bloomLeaf 0.6s ease-out ${skillNutrients[0].delay} both, floatSoft 3.5s ease-in-out 3.5s infinite` }}
-      >
-        <NutrientTag name={skillNutrients[0].name} color={skillNutrients[0].color} />
-      </div>
-      <div
-        className="absolute top-[6%] right-[8%]"
-        style={{ animation: `bloomLeaf 0.6s ease-out ${skillNutrients[1].delay} both, floatSoft 4s ease-in-out 3.8s infinite` }}
-      >
-        <NutrientTag name={skillNutrients[1].name} color={skillNutrients[1].color} />
-      </div>
-      <div
-        className="absolute top-[28%] left-[-4%]"
-        style={{ animation: `bloomLeaf 0.6s ease-out ${skillNutrients[2].delay} both, floatSoft 3.8s ease-in-out 4s infinite` }}
-      >
-        <NutrientTag name={skillNutrients[2].name} color={skillNutrients[2].color} />
-      </div>
-      <div
-        className="absolute top-[18%] right-[-2%]"
-        style={{ animation: `bloomLeaf 0.6s ease-out ${skillNutrients[3].delay} both, floatSoft 4.2s ease-in-out 3.6s infinite` }}
-      >
-        <NutrientTag name={skillNutrients[3].name} color={skillNutrients[3].color} />
-      </div>
-      <div
-        className="absolute top-[2%] left-[36%]"
-        style={{ animation: `bloomLeaf 0.6s ease-out ${skillNutrients[4].delay} both, floatSoft 3.6s ease-in-out 4.2s infinite` }}
-      >
-        <NutrientTag name={skillNutrients[4].name} color={skillNutrients[4].color} />
-      </div>
-    </div>
+      {/* 수관 - 크고 풍성하게 */}
+      <ellipse cx="250" cy="200" rx="120" ry="100" fill="url(#canopy1)"
+        style={{ animation: 'bloomLeaf 0.9s ease-out 1.5s both', transformOrigin: '250px 200px' }} />
+      <ellipse cx="160" cy="260" rx="80" ry="65" fill="url(#canopy2)"
+        style={{ animation: 'bloomLeaf 0.8s ease-out 1.7s both', transformOrigin: '160px 260px' }} />
+      <ellipse cx="345" cy="245" rx="75" ry="62" fill="url(#canopy3)"
+        style={{ animation: 'bloomLeaf 0.8s ease-out 1.8s both', transformOrigin: '345px 245px' }} />
+      <ellipse cx="200" cy="145" rx="65" ry="55" fill="url(#canopy2)"
+        style={{ animation: 'bloomLeaf 0.8s ease-out 1.9s both', transformOrigin: '200px 145px' }} />
+      <ellipse cx="310" cy="155" rx="60" ry="52" fill="url(#canopy1)"
+        style={{ animation: 'bloomLeaf 0.8s ease-out 2.0s both', transformOrigin: '310px 155px' }} />
+      <ellipse cx="250" cy="110" rx="55" ry="48" fill="url(#canopy3)"
+        style={{ animation: 'bloomLeaf 0.8s ease-out 2.1s both', transformOrigin: '250px 110px' }} />
+
+      {/* 뿌리 근처 양분 흡수 이펙트 (빛나는 점) */}
+      <circle cx="170" cy="545" r="4" fill="#FDBA74" opacity="0.6"
+        style={{ animation: 'glowPulse 2s ease-in-out 2.5s infinite' }} />
+      <circle cx="330" cy="550" r="4" fill="#93C5FD" opacity="0.6"
+        style={{ animation: 'glowPulse 2s ease-in-out 2.8s infinite' }} />
+      <circle cx="200" cy="560" r="3" fill="#FDE68A" opacity="0.5"
+        style={{ animation: 'glowPulse 2.5s ease-in-out 3s infinite' }} />
+      <circle cx="310" cy="558" r="3" fill="#C4B5FD" opacity="0.5"
+        style={{ animation: 'glowPulse 2.5s ease-in-out 3.2s infinite' }} />
+    </svg>
   );
 }
 
 /**
- * NutrientTag 컴포넌트
+ * NutrientTag 컴포넌트 - 땅에 있는 양분 태그
  *
  * Props:
  * @param {string} name - 기술명 [Required]
  * @param {string} color - 배경 색상 (hex) [Required]
+ * @param {string} glowColor - 발광 색상 (rgba) [Required]
+ * @param {number} delay - 등장 딜레이 인덱스 [Required]
  *
  * Example usage:
- * <NutrientTag name="HTML" color="#FDBA74" />
+ * <NutrientTag name="HTML" color="#FDBA74" glowColor="rgba(253,186,116,0.5)" delay={0} />
  */
-function NutrientTag({ name, color }) {
+function NutrientTag({ name, color, glowColor, delay }) {
   return (
-    <span
-      className="inline-block px-3 py-1.5 rounded-full text-xs md:text-sm font-semibold text-gray-700 shadow-sm"
-      style={{
-        backgroundColor: color,
-        animation: 'nutrientPulse 3s ease-in-out infinite',
-      }}
-    >
-      {name}
-    </span>
+    <div className="flex flex-col items-center gap-1">
+      {/* 흡수 파티클 */}
+      <div
+        className="w-2 h-2 rounded-full"
+        style={{
+          backgroundColor: color,
+          animation: `absorbUp 2.5s ease-in-out ${2.5 + delay * 0.4}s infinite`,
+        }}
+      />
+      {/* 태그 */}
+      <span
+        className="inline-block px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-bold text-gray-700 shadow-md"
+        style={{
+          backgroundColor: color,
+          boxShadow: `0 0 12px ${glowColor}`,
+          animation: `bloomLeaf 0.6s ease-out ${1.8 + delay * 0.3}s both, nutrientPulse 3s ease-in-out ${3 + delay * 0.5}s infinite`,
+        }}
+      >
+        {name}
+      </span>
+    </div>
   );
 }
 
@@ -239,80 +187,80 @@ function HeroSection() {
   const [visibleLines, setVisibleLines] = useState([]);
 
   useEffect(() => {
-    storyLines.forEach((line, index) => {
-      const timer = setTimeout(() => {
+    const timers = storyLines.map((line, index) =>
+      setTimeout(() => {
         setVisibleLines(prev => [...prev, index]);
-      }, line.delay);
-      return () => clearTimeout(timer);
-    });
+      }, line.delay)
+    );
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   const handleScrollDown = () => {
-    window.scrollTo({
-      top: window.innerHeight,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
   };
 
   return (
-    <section className="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-center overflow-hidden py-12 md:py-0">
-      {/* 파스텔 배경 그라디언트 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50 via-white to-violet-50/30 -z-10" />
+    <section className="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-between overflow-hidden">
+      {/* 파스텔 배경 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/80 via-white to-amber-50/30 -z-10" />
 
-      {/* 떠다니는 배경 장식 */}
-      <div
-        className="absolute top-[10%] left-[8%] w-20 h-20 rounded-full bg-emerald-100/50 blur-2xl"
-        style={{ animation: 'floatSoft 5s ease-in-out infinite' }}
-      />
-      <div
-        className="absolute top-[20%] right-[12%] w-16 h-16 rounded-full bg-violet-100/50 blur-2xl"
-        style={{ animation: 'floatSoft 4.5s ease-in-out 1s infinite' }}
-      />
-      <div
-        className="absolute bottom-[25%] left-[15%] w-14 h-14 rounded-full bg-amber-100/40 blur-2xl"
-        style={{ animation: 'floatSoft 5.5s ease-in-out 0.5s infinite' }}
-      />
+      {/* 배경 장식 */}
+      <div className="absolute top-[8%] left-[6%] w-24 h-24 rounded-full bg-emerald-100/40 blur-3xl"
+        style={{ animation: 'floatSoft 5s ease-in-out infinite' }} />
+      <div className="absolute top-[15%] right-[10%] w-20 h-20 rounded-full bg-violet-100/40 blur-3xl"
+        style={{ animation: 'floatSoft 4.5s ease-in-out 1s infinite' }} />
 
-      {/* 메인 콘텐츠 */}
-      <div className="flex flex-col items-center gap-8 md:gap-10 px-4">
-        {/* 스토리텔링 헤드라인 */}
-        <div className="text-center flex flex-col gap-2 md:gap-3">
-          {storyLines.map((line, index) => (
-            <h1
-              key={index}
-              className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800"
-              style={{
-                opacity: visibleLines.includes(index) ? 1 : 0,
-                transform: visibleLines.includes(index) ? 'translateY(0)' : 'translateY(24px)',
-                transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-              }}
-            >
-              {line.text}
-            </h1>
-          ))}
-        </div>
+      {/* 스토리텔링 헤드라인 */}
+      <div className="text-center flex flex-col gap-2 md:gap-3 pt-8 md:pt-12 px-4">
+        {storyLines.map((line, index) => (
+          <h1
+            key={index}
+            className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800"
+            style={{
+              opacity: visibleLines.includes(index) ? 1 : 0,
+              transform: visibleLines.includes(index) ? 'translateY(0)' : 'translateY(24px)',
+              transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+            }}
+          >
+            {line.text}
+          </h1>
+        ))}
+      </div>
 
-        {/* 나무 일러스트 */}
-        <GrowingTree />
-
-        {/* 이름 및 직무 */}
-        <div
-          className="text-center"
-          style={{ animation: 'fadeSlideUp 0.8s ease-out 3.2s both' }}
-        >
-          <p className="text-lg md:text-xl text-muted-foreground mb-1">
-            Web Publisher
-          </p>
-          <p className="text-sm md:text-base text-muted-foreground/70">
-            기초를 탄탄히, 가지를 넓게 뻗어나가겠습니다
-          </p>
+      {/* 나무 + 땅 영역 */}
+      <div className="relative w-full max-w-lg md:max-w-xl flex-1 flex flex-col items-center justify-end px-4">
+        {/* 큰 나무 */}
+        <div className="w-full" style={{ animation: 'sway 7s ease-in-out infinite' }}>
+          <GrowingTree />
         </div>
       </div>
 
-      {/* 스크롤 다운 인디케이터 */}
+      {/* 양분 태그들 - 땅 위에 나란히 */}
+      <div className="w-full max-w-lg md:max-w-xl px-4 -mt-6 md:-mt-8 mb-2">
+        <div className="flex items-end justify-between px-2 md:px-4">
+          {skillNutrients.map((nutrient, index) => (
+            <NutrientTag
+              key={nutrient.name}
+              name={nutrient.name}
+              color={nutrient.color}
+              glowColor={nutrient.glowColor}
+              delay={index}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 직무 */}
+      <div className="text-center pb-16 md:pb-20" style={{ animation: 'fadeSlideUp 0.8s ease-out 3.2s both' }}>
+        <p className="text-base md:text-lg text-muted-foreground">
+          기초를 탄탄히, 가지를 넓게 뻗어나가겠습니다
+        </p>
+      </div>
+
+      {/* 스크롤 다운 */}
       <button
         onClick={handleScrollDown}
-        className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
+        className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
         style={{ animation: 'fadeSlideUp 0.6s ease-out 3.6s both' }}
         aria-label="아래로 스크롤"
       >

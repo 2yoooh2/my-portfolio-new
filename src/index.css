@@ -36,8 +36,26 @@
 
 @keyframes sway {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(1.5deg); }
-  75% { transform: rotate(-1.5deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+@keyframes absorbUp {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  20% { opacity: 1; transform: translateY(-5px) scale(1); }
+  80% { opacity: 1; transform: translateY(-40px) scale(0.9); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.5); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Skill 원형 차트 애니메이션 */
+@keyframes circleGrow {
+  from { stroke-dashoffset: var(--circumference); }
+  to { stroke-dashoffset: var(--target-offset); }
 }
 
 @layer base {
