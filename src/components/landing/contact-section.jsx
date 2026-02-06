@@ -1,11 +1,70 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Mail, Github, Instagram, Linkedin, Send, User, Briefcase, MessageSquare } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
+import useScrollAnimation from '@/hooks/use-scroll-animation';
+
+const socialLinks = [
+  { icon: Mail, href: 'mailto:your-email@example.com', label: 'Email' },
+  { icon: Github, href: 'https://github.com', label: 'GitHub' },
+  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+];
+
 /**
- * ContactSection 컴포넌트
+ * GuestbookEntry 컴포넌트 - 방명록 항목
+ *
+ * Props:
+ * @param {Object} entry - 방명록 데이터 [Required]
+ * @param {function} formatDate - 날짜 포맷 함수 [Required]
+ *
+ * Example usage:
+ * <GuestbookEntry entry={entryData} formatDate={formatDate} />
+ */
+function GuestbookEntry({ entry, formatDate }) {
+  return (
+    <div className="p-4 rounded-xl bg-white/70 border border-gray-100 hover:border-gray-200 transition-colors">
+      <div className="flex items-start gap-3">
+        <div className="shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-sky-300 to-blue-400 flex items-center justify-center text-white text-sm font-bold">
+          {entry.author_name?.charAt(0) || '?'}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="font-semibold text-sm text-gray-800 truncate">
+                {entry.author_name || '익명'}
+              </span>
+              {entry.organization && (
+                <span className="text-xs text-gray-400 truncate">
+                  {entry.organization}
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] text-gray-400 shrink-0">
+              {formatDate(entry.created_at)}
+            </span>
+          </div>
+          <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+            {entry.message}
+          </p>
+          {entry.is_email_public && entry.email && (
+            <a
+              href={`mailto:${entry.email}`}
+              className="inline-flex items-center gap-1 mt-1.5 text-xs text-sky-500 hover:text-sky-600"
+            >
+              <Mail className="w-3 h-3" />
+              {entry.email}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * ContactSection 컴포넌트 - 양 옆 레이아웃 연락처
  *
  * Props:
  * 없음
@@ -14,6 +73,7 @@ import { Mail, Github, Instagram, Linkedin, Send, User, Briefcase, MessageSquare
  * <ContactSection />
  */
 function ContactSection() {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
   const [guestbookEntries, setGuestbookEntries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,7 +82,7 @@ function ContactSection() {
     message: '',
     organization: '',
     email: '',
-    isEmailPublic: false
+    isEmailPublic: false,
   });
 
   useEffect(() => {
@@ -49,7 +109,7 @@ function ContactSection() {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -71,7 +131,7 @@ function ContactSection() {
           message: formData.message.trim(),
           organization: formData.organization.trim() || null,
           email: formData.email.trim() || null,
-          is_email_public: formData.isEmailPublic
+          is_email_public: formData.isEmailPublic,
         }]);
 
       if (error) throw error;
@@ -81,11 +141,10 @@ function ContactSection() {
         message: '',
         organization: '',
         email: '',
-        isEmailPublic: false
+        isEmailPublic: false,
       });
 
       await fetchGuestbook();
-      alert('방명록이 등록되었습니다! 💝');
     } catch (error) {
       console.error('방명록 등록 실패:', error);
       alert('등록에 실패했습니다. 다시 시도해주세요.');
@@ -98,140 +157,144 @@ function ContactSection() {
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      month: 'short',
+      day: 'numeric',
     });
   };
 
-  const socialLinks = [
-    { icon: Mail, href: 'mailto:your-email@example.com', label: 'Email', color: 'bg-orange-400 hover:bg-orange-500' },
-    { icon: Github, href: 'https://github.com', label: 'GitHub', color: 'bg-pink-400 hover:bg-pink-500' },
-    { icon: Instagram, href: 'https://instagram.com', label: 'Instagram', color: 'bg-yellow-400 hover:bg-yellow-500' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'bg-orange-300 hover:bg-orange-400' }
-  ];
-
   return (
-    <section className="py-12 md:py-16">
-      <div className="flex flex-col gap-8">
-        {/* 헤더 */}
-        <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-orange-400 via-pink-400 to-yellow-400 bg-clip-text text-transparent">
-            Contact Me
-          </h2>
-          <p className="text-muted-foreground text-base md:text-lg">
-            언제든지 연락주세요! 방명록도 남겨주시면 감사하겠습니다 💌
-          </p>
-        </div>
+    <section ref={ref} className="py-12 md:py-20">
+      {/* 섹션 헤더 */}
+      <div
+        className="text-center mb-10 md:mb-14"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+        }}
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">Contact Me</h2>
+        <p className="text-muted-foreground text-base md:text-lg">
+          편하게 연락주세요, 방명록도 남겨주시면 감사하겠습니다
+        </p>
+      </div>
 
-        {/* 이메일 버튼 */}
-        <div className="flex justify-center">
-          <a
-            href="mailto:your-email@example.com"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            <Mail className="w-6 h-6" />
-            이메일 보내기
-          </a>
-        </div>
+      {/* 양 옆 레이아웃 */}
+      <div
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.6s ease-out 200ms, transform 0.6s ease-out 200ms',
+        }}
+      >
+        {/* 왼쪽: 연락처 + 폼 */}
+        <div className="flex flex-col gap-6">
+          {/* 연락처 카드 */}
+          <div className="p-6 md:p-8 rounded-2xl bg-white/80 border border-gray-100 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">Get in Touch</h3>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+              협업 제안, 채용 문의, 혹은 간단한 인사까지 무엇이든 환영합니다.
+            </p>
 
-        {/* SNS 링크 */}
-        <div className="flex justify-center gap-4">
-          {socialLinks.map((social, index) => (
-            <a
-              key={index}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-14 h-14 rounded-full ${social.color} flex items-center justify-center text-white shadow-md hover:shadow-lg transform hover:scale-110 transition-all duration-300`}
-              aria-label={social.label}
-            >
-              <social.icon className="w-6 h-6" />
-            </a>
-          ))}
-        </div>
+            {/* SNS 링크 */}
+            <div className="flex items-center gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-xl bg-gray-50 hover:bg-sky-50 border border-gray-100 hover:border-sky-200 flex items-center justify-center text-gray-500 hover:text-sky-600 transition-all duration-200"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+          </div>
 
-        {/* 방명록 폼 */}
-        <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-pink-50">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-orange-600 mb-4 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5" />
+          {/* 방명록 폼 */}
+          <div className="p-6 md:p-8 rounded-2xl bg-white/80 border border-gray-100 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-sky-500" />
               방명록 남기기
             </h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* 이름 입력 */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                  <User className="w-4 h-4" />
-                  이름 (선택)
-                </label>
-                <input
-                  type="text"
-                  name="authorName"
-                  value={formData.authorName}
-                  onChange={handleInputChange}
-                  placeholder="익명"
-                  className="px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:outline-none transition-colors bg-white"
-                />
+              {/* 이름 + 소속 한 줄 */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                    <User className="w-3.5 h-3.5" />
+                    이름
+                  </label>
+                  <input
+                    type="text"
+                    name="authorName"
+                    value={formData.authorName}
+                    onChange={handleInputChange}
+                    placeholder="익명"
+                    className="px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-sky-400 focus:ring-1 focus:ring-sky-100 focus:outline-none transition-all bg-white"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                    <Briefcase className="w-3.5 h-3.5" />
+                    소속
+                  </label>
+                  <input
+                    type="text"
+                    name="organization"
+                    value={formData.organization}
+                    onChange={handleInputChange}
+                    placeholder="선택"
+                    className="px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-sky-400 focus:ring-1 focus:ring-sky-100 focus:outline-none transition-all bg-white"
+                  />
+                </div>
               </div>
 
-              {/* 소속/직업 입력 */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                  <Briefcase className="w-4 h-4" />
-                  소속/직업 (선택)
-                </label>
-                <input
-                  type="text"
-                  name="organization"
-                  value={formData.organization}
-                  onChange={handleInputChange}
-                  placeholder="예: OO대학교 / 프론트엔드 개발자"
-                  className="px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:outline-none transition-colors bg-white"
-                />
-              </div>
-
-              {/* 이메일 입력 */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                  <Mail className="w-4 h-4" />
-                  이메일 (선택)
+              {/* 이메일 */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5" />
+                  이메일
                 </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="example@email.com"
-                  className="px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:outline-none transition-colors bg-white"
+                  placeholder="선택"
+                  className="px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-sky-400 focus:ring-1 focus:ring-sky-100 focus:outline-none transition-all bg-white"
                 />
                 {formData.email && (
-                  <label className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                  <label className="flex items-center gap-2 text-xs text-gray-400">
                     <input
                       type="checkbox"
                       name="isEmailPublic"
                       checked={formData.isEmailPublic}
                       onChange={handleInputChange}
-                      className="w-4 h-4 accent-orange-400"
+                      className="w-3.5 h-3.5 accent-sky-500"
                     />
                     이메일 공개하기
                   </label>
                 )}
               </div>
 
-              {/* 메시지 입력 */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                  <MessageSquare className="w-4 h-4" />
+              {/* 메시지 */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                  <MessageSquare className="w-3.5 h-3.5" />
                   메시지 *
                 </label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  placeholder="따뜻한 메시지를 남겨주세요! 💝"
-                  rows={4}
+                  placeholder="따뜻한 메시지를 남겨주세요!"
+                  rows={3}
                   required
-                  className="px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:outline-none transition-colors bg-white resize-none"
+                  className="px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-sky-400 focus:ring-1 focus:ring-sky-100 focus:outline-none transition-all bg-white resize-none"
                 />
               </div>
 
@@ -239,91 +302,56 @@ function ContactSection() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-6 bg-gradient-to-r from-orange-400 to-pink-400 hover:from-orange-500 hover:to-pink-500 text-white rounded-xl text-lg font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                className="w-full py-5 bg-gray-800 hover:bg-gray-900 text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
               >
                 {isSubmitting ? (
                   '등록 중...'
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
-                    방명록 남기기
+                    <Send className="w-4 h-4" />
+                    남기기
                   </>
                 )}
               </Button>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* 방명록 목록 */}
+        {/* 오른쪽: 방명록 목록 */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-xl font-bold text-orange-600 flex items-center gap-2">
-            💌 방명록 ({guestbookEntries.length})
-          </h3>
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-lg font-bold text-gray-800">
+              방명록
+            </h3>
+            <span className="text-sm text-muted-foreground">
+              {guestbookEntries.length}개
+            </span>
+          </div>
 
-          {isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">
-              로딩 중...
-            </div>
-          ) : guestbookEntries.length === 0 ? (
-            <Card className="border-2 border-dashed border-orange-200">
-              <CardContent className="py-8 text-center text-muted-foreground">
-                아직 방명록이 없어요. 첫 번째 방명록을 남겨주세요! 🌟
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {guestbookEntries.map((entry) => (
-                <Card
+          <div className="flex flex-col gap-3 max-h-[640px] overflow-y-auto pr-1 scrollbar-thin">
+            {isLoading ? (
+              <div className="text-center py-12 text-muted-foreground text-sm">
+                로딩 중...
+              </div>
+            ) : guestbookEntries.length === 0 ? (
+              <div className="py-16 text-center rounded-2xl bg-white/60 border-2 border-dashed border-gray-200">
+                <p className="text-muted-foreground text-sm">
+                  아직 방명록이 없어요
+                </p>
+                <p className="text-muted-foreground/60 text-xs mt-1">
+                  첫 번째 방명록을 남겨주세요!
+                </p>
+              </div>
+            ) : (
+              guestbookEntries.map((entry) => (
+                <GuestbookEntry
                   key={entry.id}
-                  className="border-2 border-orange-100 hover:border-orange-200 transition-colors bg-white"
-                >
-                  <CardContent className="p-4">
-                    <div className="flex flex-col gap-2">
-                      {/* 작성자 정보 */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-300 to-pink-300 flex items-center justify-center text-white text-sm font-bold">
-                            {entry.author_name?.charAt(0) || '익'}
-                          </div>
-                          <div>
-                            <span className="font-semibold text-gray-800">
-                              {entry.author_name || '익명'}
-                            </span>
-                            {entry.organization && (
-                              <span className="text-sm text-gray-500 ml-2">
-                                · {entry.organization}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <span className="text-xs text-gray-400">
-                          {formatDate(entry.created_at)}
-                        </span>
-                      </div>
-
-                      {/* 메시지 */}
-                      <p className="text-gray-700 pl-10 whitespace-pre-wrap">
-                        {entry.message}
-                      </p>
-
-                      {/* 공개 이메일 */}
-                      {entry.is_email_public && entry.email && (
-                        <div className="pl-10">
-                          <a
-                            href={`mailto:${entry.email}`}
-                            className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1"
-                          >
-                            <Mail className="w-3 h-3" />
-                            {entry.email}
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+                  entry={entry}
+                  formatDate={formatDate}
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </section>
