@@ -15,12 +15,14 @@ import ContactSection from '@/components/landing/contact-section';
  */
 function Home() {
   return (
-    <div className="container mx-auto px-4">
+    <div>
       <HeroSection />
-      <AboutSection />
-      <SkillSection />
-      <ProjectsSection />
-      <ContactSection />
+      <div className="container mx-auto px-4">
+        <AboutSection />
+        <SkillSection />
+        <ProjectsSection />
+        <ContactSection />
+      </div>
     </div>
   );
 }

@@ -185,7 +185,7 @@ function HeroSection() {
     <section
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative h-screen flex flex-col items-center justify-between overflow-hidden"
+      className="relative h-screen w-full flex flex-col items-center justify-between overflow-hidden"
       style={{
         background: 'linear-gradient(180deg, #1B2A4A 0%, #243B6A 30%, #2D5A88 60%, #4A8DB7 85%, #7EC8E3 100%)',
       }}
@@ -298,6 +298,14 @@ function HeroSection() {
         <span className="text-xs">scroll</span>
         <ChevronDown className="w-5 h-5 animate-bounce" />
       </button>
+
+      {/* 아래 섹션 연결 그라디언트 */}
+      <div
+        className="absolute bottom-0 left-0 w-full h-24 z-20 pointer-events-none"
+        style={{
+          background: 'linear-gradient(to bottom, transparent, hsl(204, 100%, 96%))',
+        }}
+      />
     </section>
   );
 }
