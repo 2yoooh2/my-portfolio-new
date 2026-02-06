@@ -183,7 +183,7 @@ function HeroSection() {
       className="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-between overflow-hidden"
     >
       {/* 파스텔 배경 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/80 via-white to-amber-50/30 -z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-sky-50/60 via-blue-50/20 to-transparent -z-10" />
 
       {/* 마우스 따라다니는 배경 장식 */}
       <div
