@@ -15,12 +15,21 @@ const postItNotes = [
     defaultPos: { x: 0, y: 0 },
   },
   {
-    id: 'value',
-    title: '핵심 가치관',
+    id: 'growth',
+    title: '기술 성장',
+    content: 'HTML과 CSS의 기초부터 탄탄히 다지며, JavaScript와 React까지 학습 영역을 넓혀왔습니다.',
+    color: '#D1FAE5',
+    pinColor: '#10B981',
+    rotate: 2,
+    defaultPos: { x: 0, y: 0 },
+  },
+  {
+    id: 'detail',
+    title: '꼼꼼함',
     content: '읽기 편한 코드와 디자인 가이드를 준수하는 꼼꼼함을 가장 중요하게 생각합니다.',
     color: '#DBEAFE',
     pinColor: '#3B82F6',
-    rotate: 2,
+    rotate: -1.5,
     defaultPos: { x: 0, y: 0 },
   },
   {
@@ -29,16 +38,16 @@ const postItNotes = [
     content: '문제가 해결될 때까지 파고드는 끈기, 디자이너/기획자와 원활하게 소통하는 능력.',
     color: '#FCE7F3',
     pinColor: '#EC4899',
-    rotate: -1.5,
+    rotate: 2.5,
     defaultPos: { x: 0, y: 0 },
   },
   {
     id: 'goal',
     title: '성장 목표',
     content: '기초가 탄탄한 퍼블리셔에서 사용자 경험 전반을 책임지는 프론트엔드 전문가로.',
-    color: '#D1FAE5',
-    pinColor: '#10B981',
-    rotate: 2.5,
+    color: '#EDE9FE',
+    pinColor: '#8B5CF6',
+    rotate: -2,
     defaultPos: { x: 0, y: 0 },
   },
 ];
@@ -145,15 +154,29 @@ function AboutSection() {
       const padX = 12;
       const padY = 20;
 
-      const cols = 2;
-      const colW = (w - padX * 2) / cols;
+      const cols = w >= 500 ? 3 : 2;
+      const topRowCols = cols;
+      const bottomRowCols = cols === 3 ? 2 : cols;
+      const colW = (w - padX * 2) / topRowCols;
       const rowH = (h - padY * 2) / 2;
 
       setPositions(
-        postItNotes.map((_, i) => ({
-          x: padX + (i % cols) * colW + (colW - cardW) / 2,
-          y: padY + Math.floor(i / cols) * rowH + (rowH - cardH) / 2,
-        }))
+        postItNotes.map((_, i) => {
+          const isTopRow = i < topRowCols;
+          if (isTopRow) {
+            return {
+              x: padX + i * colW + (colW - cardW) / 2,
+              y: padY + (rowH - cardH) / 2,
+            };
+          }
+          const bottomIndex = i - topRowCols;
+          const bottomColW = (w - padX * 2) / bottomRowCols;
+          const bottomOffset = (w - padX * 2 - bottomRowCols * bottomColW) / 2;
+          return {
+            x: padX + bottomOffset + bottomIndex * bottomColW + (bottomColW - cardW) / 2,
+            y: padY + rowH + (rowH - cardH) / 2,
+          };
+        })
       );
     };
 
@@ -239,14 +262,43 @@ function AboutSection() {
         </p>
       </div>
 
-      {/* 포스트잇 보드 */}
+      {/* 포스트잇 우드보드 */}
       <div
         ref={boardRef}
-        className="relative w-full min-h-[380px] md:min-h-[420px] rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-amber-50/40 via-white to-blue-50/40 overflow-hidden"
+        className="relative w-full min-h-[420px] md:min-h-[460px] rounded-2xl overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #D4A574 0%, #C4956A 25%, #B8865E 50%, #C4956A 75%, #D4A574 100%)',
+          boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
+          border: '3px solid #A0764E',
+        }}
       >
-        {/* 코르크보드 텍스처 점 */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+        {/* 나무결 텍스처 */}
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
+              95deg,
+              transparent,
+              transparent 8px,
+              rgba(139,90,43,0.3) 8px,
+              rgba(139,90,43,0.3) 9px
+            ), repeating-linear-gradient(
+              87deg,
+              transparent,
+              transparent 15px,
+              rgba(160,118,78,0.2) 15px,
+              rgba(160,118,78,0.2) 16px
+            )`,
+          }}
+        />
+        {/* 나무 결 노드(매듭) 장식 */}
+        <div
+          className="absolute top-[15%] left-[8%] w-10 h-6 rounded-full opacity-[0.08]"
+          style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
+        />
+        <div
+          className="absolute bottom-[20%] right-[12%] w-8 h-5 rounded-full opacity-[0.06]"
+          style={{ background: 'radial-gradient(ellipse, #8B5A2B, transparent)' }}
         />
 
         {positions.length > 0 && postItNotes.map((note, index) => (
