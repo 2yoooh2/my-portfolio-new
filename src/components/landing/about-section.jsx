@@ -133,7 +133,7 @@ function CatAvatar() {
 function ProfileCard({ isVisible }) {
   return (
     <div
-      className="flex flex-col items-center gap-4 p-6 md:p-8 rounded-2xl bg-white/80 border border-gray-100 shadow-sm"
+      className="flex flex-col items-center gap-4 p-6 md:p-8 rounded-2xl bg-white border-2 border-sky-200 shadow-lg"
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -141,7 +141,7 @@ function ProfileCard({ isVisible }) {
       }}
     >
       {/* 고양이 아바타 */}
-      <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-sky-100 shadow-md">
+      <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-sky-200 shadow-lg">
         <CatAvatar />
       </div>
 
@@ -409,14 +409,14 @@ function AboutSection() {
             ref={boardRef}
             className="relative w-full min-h-[420px] md:min-h-[440px] rounded-2xl overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, #D4A574 0%, #C4956A 25%, #B8865E 50%, #C4956A 75%, #D4A574 100%)',
-              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
-              border: '3px solid #A0764E',
+              background: 'linear-gradient(135deg, #DBBF9E 0%, #D1B08E 25%, #C9A682 50%, #D1B08E 75%, #DBBF9E 100%)',
+              boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.06)',
+              border: '2px solid #C4A882',
             }}
           >
             {/* 나무결 텍스처 */}
             <div
-              className="absolute inset-0 opacity-[0.12]"
+              className="absolute inset-0 opacity-[0.08]"
               style={{
                 backgroundImage: `repeating-linear-gradient(
                   95deg,
